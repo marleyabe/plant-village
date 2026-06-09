@@ -499,6 +499,40 @@
         display: none;
       }
 
+      @media print {
+        @page {
+          size: 1280px 720px;
+          margin: 0;
+        }
+
+        html,
+        body {
+          width: 1280px;
+          background: var(--bg);
+          print-color-adjust: exact;
+          -webkit-print-color-adjust: exact;
+        }
+
+        body::before {
+          print-color-adjust: exact;
+          -webkit-print-color-adjust: exact;
+        }
+
+        .slide {
+          width: 1280px;
+          height: 720px;
+          break-after: page;
+          page-break-after: always;
+          print-color-adjust: exact;
+          -webkit-print-color-adjust: exact;
+        }
+
+        .slide:last-child {
+          break-after: auto;
+          page-break-after: auto;
+        }
+      }
+
       @media (max-width: 900px) {
         .slide {
           padding: 26px 22px 28px;
