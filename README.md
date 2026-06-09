@@ -31,6 +31,10 @@ Modelo treinado:
 
 - `artifacts/models/mobilenet_full.keras`
 
+Apresentacao final:
+
+- `apresentacao_final.html`
+
 ## Estrutura
 
 ```text

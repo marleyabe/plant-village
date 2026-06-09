@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Apresentacao Final - PlantVillage</title>
+    <style>
+      :root {
+        --bg: #f6f7f4;
+        --ink: #17211b;
+        --muted: #5d6a63;
+        --line: #d9dfd8;
+        --panel: #ffffff;
+        --green: #2f6f4e;
+        --leaf: #6aa15e;
+        --gold: #c99232;
+        --red: #b84a3a;
+        --blue: #3d6f91;
+        --shadow: 0 18px 55px rgba(23, 33, 27, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(90deg, rgba(47, 111, 78, 0.08) 1px, transparent 1px),
+          linear-gradient(rgba(47, 111, 78, 0.06) 1px, transparent 1px);
+        background-size: 64px 64px;
+        mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.22), transparent 45%);
+      }
+
+      .slide {
+        min-height: 100vh;
+        scroll-snap-align: start;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        padding: 44px 64px 34px;
+        position: relative;
+      }
+
+      .slide::after {
+        content: attr(data-slide);
+        position: absolute;
+        right: 40px;
+        bottom: 26px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        gap: 32px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 16px;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 18px;
+      }
+
+      .brand {
+        color: var(--green);
+        font-weight: 750;
+      }
+
+      .kicker {
+        color: var(--green);
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 15px;
+        margin: 0 0 14px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        font-size: clamp(48px, 7vw, 86px);
+        line-height: 0.96;
+        max-width: 1050px;
+        margin-bottom: 26px;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        font-size: clamp(38px, 5vw, 64px);
+        line-height: 1.02;
+        max-width: 1000px;
+        margin-bottom: 24px;
+        letter-spacing: 0;
+      }
+
+      h3 {
+        font-size: 22px;
+        margin-bottom: 10px;
+      }
+
+      p,
+      li {
+        font-size: 24px;
+        line-height: 1.45;
+      }
+
+      ul {
+        padding-left: 1.2em;
+        margin: 0;
+      }
+
+      li + li {
+        margin-top: 10px;
+      }
+
+      .content {
+        align-self: center;
+        width: min(1180px, 100%);
+        margin: 0 auto;
+      }
+
+      .lead {
+        font-size: clamp(26px, 3vw, 36px);
+        line-height: 1.28;
+        color: var(--muted);
+        max-width: 920px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 34px;
+        align-items: stretch;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+        border-radius: 8px;
+        padding: 28px;
+      }
+
+      .quiet-panel {
+        background: rgba(255, 255, 255, 0.68);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 24px;
+      }
+
+      .metric {
+        display: grid;
+        gap: 8px;
+      }
+
+      .metric strong {
+        font-size: clamp(42px, 5vw, 72px);
+        line-height: 1;
+        color: var(--green);
+      }
+
+      .metric span {
+        font-size: 20px;
+        color: var(--muted);
+      }
+
+      .timeline {
+        display: grid;
+        gap: 16px;
+      }
+
+      .step {
+        display: grid;
+        grid-template-columns: 74px 1fr;
+        gap: 18px;
+        align-items: start;
+      }
+
+      .step b {
+        display: grid;
+        place-items: center;
+        height: 52px;
+        border-radius: 999px;
+        background: var(--green);
+        color: white;
+        font-size: 18px;
+      }
+
+      .step p {
+        margin: 0;
+        font-size: 23px;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 28px;
+      }
+
+      .tag {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 9px 14px;
+        background: white;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .visual {
+        width: 100%;
+        height: 100%;
+        min-height: 330px;
+        object-fit: contain;
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero-visual {
+        min-height: 480px;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at 22% 24%, rgba(106, 161, 94, 0.22), transparent 28%),
+          linear-gradient(135deg, #ffffff 0%, #e9efe5 100%);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .leaf-mark {
+        width: 340px;
+        aspect-ratio: 1;
+        border-radius: 58% 42% 58% 42%;
+        background:
+          linear-gradient(135deg, rgba(47, 111, 78, 0.15), transparent 58%),
+          linear-gradient(45deg, var(--leaf), var(--green));
+        transform: rotate(-22deg);
+        position: relative;
+      }
+
+      .leaf-mark::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 8%;
+        width: 3px;
+        height: 86%;
+        background: rgba(255, 255, 255, 0.7);
+        transform: rotate(28deg);
+        transform-origin: top;
+      }
+
+      .leaf-mark::after {
+        content: "";
+        position: absolute;
+        right: 70px;
+        top: 94px;
+        width: 82px;
+        height: 82px;
+        border-radius: 999px;
+        background: rgba(184, 74, 58, 0.9);
+        box-shadow:
+          -94px 94px 0 rgba(201, 146, 50, 0.88),
+          -38px 154px 0 rgba(184, 74, 58, 0.72);
+      }
+
+      .quote {
+        font-size: clamp(32px, 4vw, 56px);
+        line-height: 1.16;
+        max-width: 1080px;
+        color: var(--ink);
+      }
+
+      .quote em {
+        color: var(--green);
+        font-style: normal;
+      }
+
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+
+      .table th,
+      .table td {
+        text-align: left;
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line);
+        font-size: 20px;
+      }
+
+      .table th {
+        color: var(--green);
+        background: #eef4ec;
+      }
+
+      .table tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .callout {
+        border-left: 8px solid var(--gold);
+        padding: 18px 22px;
+        background: white;
+        border-radius: 0 8px 8px 0;
+        font-size: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .source {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.4;
+        max-width: 980px;
+      }
+
+      .source a {
+        color: var(--green);
+      }
+
+      footer {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .notes {
+        display: none;
+      }
+
+      @media (max-width: 900px) {
+        .slide {
+          padding: 26px 22px 28px;
+        }
+
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+        }
+
+        .grid-2,
+        .grid-3 {
+          grid-template-columns: 1fr;
+        }
+
+        p,
+        li {
+          font-size: 20px;
+        }
+
+        .step {
+          grid-template-columns: 54px 1fr;
+        }
+
+        .step b {
+          height: 44px;
+        }
+      }
+
+      @media print {
+        html {
+          scroll-snap-type: none;
+        }
+
+        .slide {
+          page-break-after: always;
+          min-height: 100vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="slide" data-slide="1/12">
+      <header>
+        <span class="brand">PlantVillage • Deep Learning</span>
+        <span>Apresentacao final • 10 a 15 minutos</span>
+      </header>
+      <main class="content grid-2">
+        <div>
+          <p class="kicker">Problema escolhido</p>
+          <h1>Classificacao de doencas em folhas de plantas</h1>
+          <p class="lead">
+            Como transformar uma foto de folha em uma previsao objetiva sobre saude ou doenca
+            usando redes neurais convolucionais?
+          </p>
+          <div class="tag-row">
+            <span class="tag">TensorFlow</span>
+            <span class="tag">PlantVillage</span>
+            <span class="tag">MobileNetV2</span>
+            <span class="tag">38 classes</span>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Ilustracao de folha com manchas">
+          <div class="leaf-mark"></div>
+        </div>
+      </main>
+      <footer>Equipe: Marley Abe Silva, Luis Pedro de Castro Alves e Maycon Moriy Abe Machado</footer>
+      <aside class="notes">
+        Abrir com o problema concreto: uma decisao agricola depende de identificar sinais visuais
+        cedo. A historia da apresentacao segue problema, dados, metodo, evidencia e conclusao.
+      </aside>
+    </section>
+
+    <section class="slide" data-slide="2/12">
+      <header>
+        <span class="brand">1. Contexto</span>
+        <span>Por que este problema importa?</span>
+      </header>
+      <main class="content">
+        <p class="quote">
+          A folha e um dos primeiros lugares onde a planta <em>mostra sinais de estresse</em>.
+          O desafio e transformar esse sinal visual em uma classificacao consistente.
+        </p>
+        <div class="grid-3" style="margin-top: 42px">
+          <div class="panel">
+            <h3>Impacto pratico</h3>
+            <p>Identificar doencas mais cedo pode apoiar manejo, triagem e acompanhamento.</p>
+          </div>
+          <div class="panel">
+            <h3>Problema visual</h3>
+            <p>Manchas, cores e textura variam entre especies, doencas e folhas saudaveis.</p>
+          </div>
+          <div class="panel">
+            <h3>Objetivo tecnico</h3>
+            <p>Treinar um classificador que receba uma imagem e retorne uma das 38 classes.</p>
+          </div>
+        </div>
+      </main>
+      <footer>Mensagem central: automatizar uma leitura visual, mas com consciencia das limitacoes.</footer>
+    </section>
+
+    <section class="slide" data-slide="3/12">
+      <header>
+        <span class="brand">2. Motivacao</span>
+        <span>Por que usar Deep Learning?</span>
+      </header>
+      <main class="content grid-2">
+        <div>
+          <h2>O problema nao e apenas detectar uma mancha</h2>
+          <p class="lead">
+            A mesma doenca pode aparecer com intensidade diferente, e classes diferentes podem
+            compartilhar padroes visuais parecidos.
+          </p>
+        </div>
+        <div class="timeline">
+          <div class="step">
+            <b>1</b>
+            <p>Extrair caracteristicas manualmente seria fragil para 38 classes.</p>
+          </div>
+          <div class="step">
+            <b>2</b>
+            <p>CNNs aprendem padroes de borda, cor, textura e forma diretamente das imagens.</p>
+          </div>
+          <div class="step">
+            <b>3</b>
+            <p>Transfer learning aproveita conhecimento visual aprendido em grandes bases.</p>
+          </div>
+        </div>
+      </main>
+      <footer>Decisao: comparar baseline simples com MobileNetV2 pre-treinada.</footer>
+    </section>
+
+    <section class="slide" data-slide="4/12">
+      <header>
+        <span class="brand">3. Dataset</span>
+        <span>PlantVillage via TensorFlow Datasets</span>
+      </header>
+      <main class="content">
+        <h2>Uma base grande, organizada e adequada para classificacao supervisionada</h2>
+        <div class="grid-3">
+          <div class="metric panel">
+            <strong>54.303</strong>
+            <span>imagens no experimento completo</span>
+          </div>
+          <div class="metric panel">
+            <strong>38</strong>
+            <span>classes de planta, doenca e folha saudavel</span>
+          </div>
+          <div class="metric panel">
+            <strong>224</strong>
+            <span>pixels por lado na entrada do modelo</span>
+          </div>
+        </div>
+        <table class="table" style="margin-top: 32px">
+          <thead>
+            <tr>
+              <th>Parte</th>
+              <th>Proporcao</th>
+              <th>Quantidade</th>
+              <th>Uso</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Treino</td>
+              <td>70%</td>
+              <td>38.012</td>
+              <td>Aprender os pesos</td>
+            </tr>
+            <tr>
+              <td>Validacao</td>
+              <td>15%</td>
+              <td>8.145</td>
+              <td>Acompanhar generalizacao</td>
+            </tr>
+            <tr>
+              <td>Teste</td>
+              <td>15%</td>
+              <td>8.146</td>
+              <td>Medir resultado final</td>
+            </tr>
+          </tbody>
+        </table>
+      </main>
+      <footer>Split deterministico com seed fixa para permitir reproducao.</footer>
+    </section>
+
+    <section class="slide" data-slide="5/12">
+      <header>
+        <span class="brand">4. Pipeline</span>
+        <span>Do dado bruto ao tensor de treino</span>
+      </header>
+      <main class="content grid-2">
+        <div>
+          <h2>O pipeline foi desenhado para ser reproduzivel e leve</h2>
+          <p class="lead">
+            Depois de um problema de consumo excessivo de recursos, limitamos explicitamente
+            paralelismo, shuffle, prefetch e memoria da GPU.
+          </p>
+        </div>
+        <div class="timeline">
+          <div class="step">
+            <b>A</b>
+            <p>Carregar PlantVillage com `tfds.load` e `shuffle_files=False`.</p>
+          </div>
+          <div class="step">
+            <b>B</b>
+            <p>Aplicar split 70/15/15 com seed fixa.</p>
+          </div>
+          <div class="step">
+            <b>C</b>
+            <p>Redimensionar para 224x224 e converter para `float32`.</p>
+          </div>
+          <div class="step">
+            <b>D</b>
+            <p>Aplicar aumento de dados apenas durante treino.</p>
+          </div>
+        </div>
+      </main>
+      <footer>Boas praticas: determinismo, validacao de config e uso conservador de recursos.</footer>
+    </section>
+
+    <section class="slide" data-slide="6/12">
+      <header>
+        <span class="brand">5. Modelo escolhido</span>
+        <span>MobileNetV2 com transfer learning</span>
+      </header>
+      <main class="content grid-2">
+        <div class="panel">
+          <h2>Por que MobileNetV2?</h2>
+          <ul>
+            <li>Boa relacao entre desempenho e custo computacional.</li>
+            <li>Arquitetura adequada para imagens 224x224.</li>
+            <li>Pesos pre-treinados no ImageNet aceleram o aprendizado.</li>
+            <li>Camada final adaptada para 38 classes do PlantVillage.</li>
+          </ul>
+        </div>
+        <div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Componente</th>
+                <th>Funcao</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Data augmentation</td>
+                <td>Reduzir dependencia de variacoes simples da imagem</td>
+              </tr>
+              <tr>
+                <td>MobileNetV2</td>
+                <td>Extrair caracteristicas visuais</td>
+              </tr>
+              <tr>
+                <td>GlobalAveragePooling2D</td>
+                <td>Condensar mapas de caracteristicas</td>
+              </tr>
+              <tr>
+                <td>Dropout</td>
+                <td>Reduzir overfitting</td>
+              </tr>
+              <tr>
+                <td>Dense softmax</td>
+                <td>Gerar probabilidade para 38 classes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+      <footer>Tambem existe uma CNN baseline no codigo para comparacao e validacao.</footer>
+    </section>
+
+    <section class="slide" data-slide="7/12">
+      <header>
+        <span class="brand">6. Treinamento</span>
+        <span>Experimento final</span>
+      </header>
+      <main class="content grid-2">
+        <div>
+          <h2>Treinamos com GPU, mas com limites para preservar a maquina</h2>
+          <div class="grid-2">
+            <div class="metric quiet-panel">
+              <strong>20</strong>
+              <span>epocas</span>
+            </div>
+            <div class="metric quiet-panel">
+              <strong>8</strong>
+              <span>batch size</span>
+            </div>
+            <div class="metric quiet-panel">
+              <strong>2</strong>
+              <span>CPUs no Docker</span>
+            </div>
+            <div class="metric quiet-panel">
+              <strong>8 GB</strong>
+              <span>limite de RAM</span>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Callbacks</h3>
+          <ul>
+            <li>Checkpoint pelo melhor `val_accuracy`.</li>
+            <li>EarlyStopping monitorando `val_loss`.</li>
+            <li>ReduceLROnPlateau para reduzir learning rate.</li>
+          </ul>
+          <div class="callout" style="margin-top: 28px">
+            GPU reduziu a primeira epoca de aproximadamente 944s para 111s.
+          </div>
+        </div>
+      </main>
+      <footer>O treino completo gerou modelo, historico, grafico e metadados.</footer>
+    </section>
+
+    <section class="slide" data-slide="8/12">
+      <header>
+        <span class="brand">7. Curva de treino</span>
+        <span>Aprendizado e validacao</span>
+      </header>
+      <main class="content grid-2">
+        <div>
+          <h2>A validacao estabilizou perto de 96%</h2>
+          <p class="lead">
+            A evolucao mostra ganho rapido nas primeiras epocas, seguido por ajustes menores
+            quando o learning rate foi reduzido.
+          </p>
+          <div class="callout">
+            Melhor validacao observada: `val_accuracy = 0.9596`.
+          </div>
+        </div>
+        <img
+          class="visual"
+          src="artifacts/plots/mobilenet_full_history.png"
+          alt="Grafico de historico de treino do MobileNetV2"
+        />
+      </main>
+      <footer>Arquivo: artifacts/plots/mobilenet_full_history.png</footer>
+    </section>
+
+    <section class="slide" data-slide="9/12">
+      <header>
+        <span class="brand">8. Metricas usadas</span>
+        <span>Resultado no conjunto de teste</span>
+      </header>
+      <main class="content">
+        <h2>O desempenho final foi medido em dados separados do treino</h2>
+        <div class="grid-3">
+          <div class="metric panel">
+            <strong>95,40%</strong>
+            <span>accuracy</span>
+          </div>
+          <div class="metric panel">
+            <strong>94,41%</strong>
+            <span>macro F1</span>
+          </div>
+          <div class="metric panel">
+            <strong>95,36%</strong>
+            <span>weighted F1</span>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top: 32px">
+          <div class="quiet-panel">
+            <h3>Por que accuracy?</h3>
+            <p>Mede o percentual total de acertos e e facil de comunicar.</p>
+          </div>
+          <div class="quiet-panel">
+            <h3>Por que F1?</h3>
+            <p>Combina precision e recall, ajudando a enxergar desempenho alem do acerto bruto.</p>
+          </div>
+        </div>
+      </main>
+      <footer>Teste com 8.146 imagens nunca usadas para treinar os pesos.</footer>
+    </section>
+
+    <section class="slide" data-slide="10/12">
+      <header>
+        <span class="brand">9. Matriz de confusao</span>
+        <span>Onde o modelo acerta e onde confunde</span>
+      </header>
+      <main class="content grid-2">
+        <img
+          class="visual"
+          src="artifacts/plots/mobilenet_full_confusion_matrix.png"
+          alt="Matriz de confusao do MobileNetV2 no PlantVillage"
+        />
+        <div>
+          <h2>Nem todo erro tem o mesmo peso explicativo</h2>
+          <ul>
+            <li>Classes visualmente parecidas tendem a concentrar confusoes.</li>
+            <li>A matriz mostra se o erro e isolado ou sistematico.</li>
+            <li>Esse grafico orienta onde melhorar dados, augmentations ou fine tuning.</li>
+          </ul>
+        </div>
+      </main>
+      <footer>Arquivo: artifacts/plots/mobilenet_full_confusion_matrix.png</footer>
+    </section>
+
+    <section class="slide" data-slide="11/12">
+      <header>
+        <span class="brand">10. Demonstracao</span>
+        <span>Como usar o modelo treinado</span>
+      </header>
+      <main class="content grid-2">
+        <div>
+          <h2>Entrada: uma imagem de folha. Saida: classe prevista e confianca.</h2>
+          <p class="lead">
+            A demonstracao pode ser feita pelo script `plant-predict`, usando o modelo treinado
+            versionado no repositorio.
+          </p>
+          <div class="callout">
+            Comando: `uv run plant-predict artifacts/models/mobilenet_full.keras imagem.jpg
+            --class-names artifacts/reports/mobilenet_full_metadata.json`
+          </div>
+        </div>
+        <div class="timeline">
+          <div class="step">
+            <b>1</b>
+            <p>Carregar imagem enviada pelo usuario.</p>
+          </div>
+          <div class="step">
+            <b>2</b>
+            <p>Redimensionar para 224x224.</p>
+          </div>
+          <div class="step">
+            <b>3</b>
+            <p>Rodar o modelo `mobilenet_full.keras`.</p>
+          </div>
+          <div class="step">
+            <b>4</b>
+            <p>Exibir classe prevista e confianca.</p>
+          </div>
+        </div>
+      </main>
+      <footer>Para a apresentacao ao vivo, separar uma imagem de exemplo antes da aula.</footer>
+    </section>
+
+    <section class="slide" data-slide="12/12">
+      <header>
+        <span class="brand">11. Conclusoes</span>
+        <span>O que aprendemos</span>
+      </header>
+      <main class="content">
+        <h2>O modelo funciona bem na base, mas o contexto do dado importa</h2>
+        <div class="grid-3">
+          <div class="panel">
+            <h3>Conclusao tecnica</h3>
+            <p>MobileNetV2 atingiu 95,40% de acuracia no teste com custo computacional controlado.</p>
+          </div>
+          <div class="panel">
+            <h3>Conclusao de produto</h3>
+            <p>O modelo pode apoiar triagem visual, mas nao substitui validacao agronomica.</p>
+          </div>
+          <div class="panel">
+            <h3>Proximo passo</h3>
+            <p>Testar com fotos reais de campo e medir queda de desempenho fora do PlantVillage.</p>
+          </div>
+        </div>
+        <p class="source" style="margin-top: 34px">
+          Estrutura narrativa baseada em recomendacoes de comunicacao cientifica: definir mensagem
+          central, adaptar ao publico e encadear motivacao, metodo, resultados e impacto. Referencias:
+          MIT Communication Lab, Harvard Catalyst, Stanford Medicine e University of Illinois.
+        </p>
+      </main>
+      <footer>Mensagem final: resultado forte, reproducivel e com limitacoes declaradas.</footer>
+    </section>
+  </body>
+</html>
