@@ -266,97 +266,109 @@ Fechamento possível:
 
 > "O principal resultado não é só a acurácia. O projeto entrega um pipeline completo e reprodutível, com modelo treinado, avaliação, artefatos e análise dos limites."
 
-## Pegadinhas e perguntas além dos slides
+## Pegadinhas de Deep Learning
 
-Esta seção remove perguntas óbvias que já estão respondidas diretamente nos slides, como quantidade de classes, épocas ou acurácia. O foco aqui é treinar respostas para perguntas que exigem justificativa técnica.
+Esta seção foca em perguntas que podem aparecer por causa da matéria de deep learning. A ideia é treinar respostas que exigem entender o modelo, e não apenas repetir números dos slides.
 
-### 1. A acurácia alta prova que o modelo funciona em fotos reais?
+### 1. Por que uma CNN faz sentido para imagens de folhas?
 
-Não. A acurácia alta prova bom desempenho no teste do PlantVillage. Como a base é controlada, com folha centralizada, boa iluminação e fundo mais padronizado, ainda precisamos validar com fotos reais fora da base para falar em generalização para campo.
+CNNs são adequadas para imagem porque exploram padrões locais, como bordas, texturas, manchas e formatos. As convoluções aprendem filtros que detectam características visuais em diferentes regiões da imagem. Em folhas, isso é útil porque doenças aparecem como padrões visuais de cor, textura e lesão.
 
-### 2. Existe risco de vazamento de dados no split?
+### 2. O que a MobileNetV2 está aprendendo nesse projeto?
 
-O split foi feito de forma determinística e o teste ficou separado do treino. O principal ponto de atenção é que o PlantVillage pode ter imagens muito parecidas dentro da mesma base. Então, mesmo sem usar o teste no treino, a validação externa ainda é importante.
+Como o backbone foi pré-treinado no ImageNet, ele já traz filtros úteis para detectar formas, bordas, texturas e padrões visuais gerais. No nosso projeto, o classificador final aprende a combinar essas características para separar as 38 classes do PlantVillage.
 
-### 3. Por que não usar cross-validation?
+### 3. Por que usar transfer learning e não treinar tudo do zero?
 
-Cross-validation aumentaria muito o custo porque exigiria treinar o modelo várias vezes. Para uma base com 54.303 imagens e treino com CNN, o split fixo 70/15/15 é uma escolha mais simples, reprodutível e adequada para o escopo do trabalho.
+Treinar do zero exigiria mais dados, mais tempo e mais ajuste fino. Com transfer learning, partimos de uma rede que já aprendeu representações visuais gerais. Isso acelera o treino e costuma melhorar o resultado, principalmente em projetos com prazo e recurso limitados.
 
-### 4. Por que o F1 macro ficou menor que o F1 ponderado?
+### 4. Qual é a diferença entre feature extractor e fine tuning?
 
-O F1 macro dá o mesmo peso para todas as classes. Se algumas classes menores ou mais difíceis tiverem desempenho pior, ele cai mais. O F1 ponderado considera o número de exemplos por classe, por isso tende a ficar mais próximo da acurácia.
+Como feature extractor, a MobileNetV2 fica congelada e só o topo classificador é treinado. No fine tuning, algumas camadas do backbone também são destravadas para adaptar melhor os filtros ao novo dataset. Fine tuning pode melhorar o resultado, mas aumenta risco de overfitting.
 
-### 5. Se o modelo erra com 99% de confiança, a confiança não serve?
+### 5. Por que congelar o backbone no treino principal?
 
-Serve, mas precisa ser interpretada com cuidado. A softmax distribui probabilidade apenas entre as classes conhecidas. Se a imagem parece muito com uma classe errada para o modelo, ele pode errar com confiança alta. Isso não é uma garantia de certeza real.
+Congelar o backbone reduz custo computacional, deixa o treino mais estável e diminui risco de destruir pesos úteis aprendidos no ImageNet. É uma primeira etapa comum em transfer learning: treina-se o classificador final antes de pensar em destravar camadas.
 
-### 6. Por que congelar o backbone em vez de fazer fine tuning direto?
+### 6. O que poderia dar errado no fine tuning?
 
-Congelar o backbone reduz custo, risco de overfitting e instabilidade no treino. Como a MobileNetV2 já vem pré-treinada, primeiro treinamos o classificador final. Fine tuning pode ser um próximo passo, mas deve ser feito com learning rate menor e controle por validação.
+Se destravarmos muitas camadas ou usarmos learning rate alto, o modelo pode overfitar ao PlantVillage ou perder representações gerais úteis do ImageNet. O ajuste correto seria destravar poucas camadas finais, usar learning rate menor e acompanhar validação.
 
-### 7. O que poderia dar errado ao fazer fine tuning?
+### 7. Por que a saída usa softmax?
 
-Se destravarmos muitas camadas com learning rate alto, o modelo pode perder parte dos pesos úteis aprendidos no ImageNet ou overfitar ao PlantVillage. O ideal seria destravar poucas camadas finais, reduzir o learning rate e comparar no conjunto de validação.
+Softmax transforma os logits em uma distribuição de probabilidade entre as 38 classes. Como o problema é multiclasse e cada imagem pertence a uma classe, softmax é adequado para escolher a classe mais provável.
 
-### 8. Por que augmentation simples pode não ser suficiente?
+### 8. Softmax alto significa que o modelo tem certeza?
 
-Flip, rotação e zoom ajudam, mas fotos reais podem ter variações maiores: sombra, fundo complexo, folha parcialmente cortada, blur, ângulo diferente e iluminação ruim. Para aproximar uso real, seria necessário augmentation mais forte e validação fora do PlantVillage.
+Não necessariamente. Softmax alto significa que, entre as classes conhecidas, uma classe recebeu probabilidade muito maior. O modelo pode errar com 99% de confiança se aprendeu um padrão errado ou se a imagem parece muito com outra classe.
 
-### 9. O modelo classifica a doença ou só reconhece padrões da base?
+### 9. Por que usar `sparse_categorical_crossentropy`?
 
-Tecnicamente, ele aprende padrões visuais associados às classes do dataset. Se a base tiver viés de fundo, iluminação ou enquadramento, o modelo pode usar esses sinais também. Por isso a validação externa é essencial.
+Porque temos um problema multiclasse com rótulos inteiros. Se os rótulos fossem one-hot encoded, usaríamos `categorical_crossentropy`. A versão `sparse` evita converter os labels para one-hot sem mudar o objetivo matemático da classificação.
 
-### 10. Por que não basta mostrar exemplos de acerto?
+### 10. O que a loss mede durante o treino?
 
-Exemplos de acerto ajudam na demonstração, mas podem ser selecionados e não representam o comportamento geral. O resultado precisa ser sustentado por métricas no teste, matriz de confusão e análise de erros.
+A loss mede o quanto a distribuição prevista pelo modelo está distante da classe correta. Mesmo quando a acurácia parece boa, a loss pode indicar se o modelo está ficando confiante demais em previsões erradas ou se ainda há espaço de melhoria.
 
-### 11. Como vocês sabem que o modelo não decorou o treino?
+### 11. Como identificar overfitting pela curva de treino?
 
-Não dá para afirmar só olhando o treino. A evidência contra memorização forte é o desempenho em validação e teste separados. Mesmo assim, como o teste vem da mesma base, a prova mais forte seria avaliar com imagens externas.
+Um sinal clássico é a acurácia de treino continuar subindo enquanto a validação para de melhorar ou piora. Outro sinal é a loss de treino cair enquanto a loss de validação sobe. No nosso caso, o resultado no teste sugere que não houve overfitting forte dentro do PlantVillage.
 
-### 12. Por que usar `sparse_categorical_crossentropy` e não `categorical_crossentropy`?
+### 12. Por que data augmentation ajuda contra overfitting?
 
-Porque os rótulos do dataset são inteiros. `categorical_crossentropy` seria mais adequada se os rótulos estivessem em one-hot encoding. Usar `sparse_categorical_crossentropy` evita uma transformação desnecessária.
+Augmentation cria variações das imagens de treino, como flip, rotação e zoom. Isso força o modelo a aprender padrões mais robustos, em vez de decorar exatamente o enquadramento das imagens originais.
 
-### 13. O que aconteceria se data augmentation fosse aplicado no teste?
+### 13. Por que augmentation não deve ser usado no teste?
 
-O teste deixaria de ser um conjunto fixo e a métrica poderia variar conforme as transformações. Isso prejudica a comparação e a reprodutibilidade. Por isso augmentation fica apenas no treino.
+O teste precisa medir o modelo em um conjunto fixo e comparável. Se aplicarmos transformações aleatórias no teste, a métrica pode mudar de uma execução para outra e deixa de representar uma avaliação estável.
 
-### 14. Por que salvar metadata junto com o modelo?
+### 14. O modelo pode estar aprendendo o fundo em vez da doença?
 
-O metadata guarda informações como classes, tamanho da imagem, batch e seed. Isso evita avaliar ou predizer com configuração diferente da usada no treino, principalmente a ordem das classes.
+Pode. Redes neurais aprendem correlações presentes nos dados, não necessariamente a causa real. Se o fundo, iluminação ou enquadramento estiverem associados a uma classe, o modelo pode usar esses sinais. Por isso a validação fora do PlantVillage é importante.
 
-### 15. O que garante que a ordem das classes está correta na predição?
+### 15. A acurácia alta prova generalização?
 
-O script de predição usa o metadata salvo. Sem isso, poderíamos carregar o modelo corretamente, mas interpretar o índice de saída com uma lista de classes em ordem errada.
+Prova generalização apenas para o teste separado da mesma base. Não prova generalização para fotos reais de campo, porque a distribuição das imagens pode mudar. Esse problema é chamado de shift de distribuição.
 
-### 16. Por que o batch size foi tão baixo?
+### 16. O que é shift de distribuição nesse contexto?
 
-Foi uma escolha conservadora para caber na GPU e evitar uso excessivo de memória. O foco era concluir o experimento completo com estabilidade, não maximizar throughput.
+É quando as imagens de uso real são diferentes das imagens de treino e teste. Por exemplo: folhas no campo, fundo complexo, iluminação ruim, sombra, blur, ângulo diferente ou folha parcialmente cortada.
 
-### 17. A GPU muda o resultado do modelo?
+### 17. Por que F1 macro é relevante em deep learning multiclasse?
 
-Em princípio, a GPU muda principalmente a velocidade. Pequenas diferenças numéricas podem acontecer por operações paralelas, mas a configuração com seed e split fixos ajuda a manter o experimento controlado.
+Porque acurácia pode esconder desempenho ruim em classes menos frequentes. O F1 macro dá o mesmo peso para cada classe, então ajuda a perceber se o modelo está aprendendo todas as classes ou só indo bem nas maiores.
 
-### 18. O que vocês fariam se a matriz de confusão mostrasse erro concentrado em poucas classes?
+### 18. O que significa erro concentrado em algumas classes?
 
-Olharíamos essas classes no relatório por classe, revisaríamos exemplos de erro, testaríamos augmentation mais específico, consideraríamos fine tuning e, se possível, adicionaríamos dados externos dessas classes.
+Pode indicar que as classes têm sintomas visualmente parecidos, poucos exemplos, ruído nos rótulos ou que o modelo não aprendeu características suficientes para separá-las. A matriz de confusão ajuda a identificar esses grupos.
 
-### 19. O modelo sabe lidar com uma planta ou doença que não está nas 38 classes?
+### 19. O que é dropout e por que ele aparece no topo do modelo?
 
-Não de forma confiável. O modelo sempre escolhe uma das 38 classes conhecidas. Para lidar com classes desconhecidas, seria necessário pensar em limiar de confiança, detecção de out-of-distribution ou treinar com dados desse novo caso.
+Dropout desativa aleatoriamente parte das ativações durante o treino. Isso reduz dependência excessiva de neurônios específicos e ajuda a regularizar o classificador final.
 
-### 20. Por que versionar o modelo no Git não é sempre uma boa prática?
+### 20. Por que usar GlobalAveragePooling2D antes da Dense?
 
-Modelos grandes podem deixar o repositório pesado. Neste projeto, o `.keras` tem cerca de 10 MB, então é aceitável para entrega acadêmica. Em projetos maiores, seria melhor usar Git LFS, storage externo ou registry de modelos.
+Ele resume cada mapa de características em um valor médio, reduzindo bastante a quantidade de parâmetros em comparação com `Flatten`. Isso deixa o topo mais leve e reduz risco de overfitting.
 
-### 21. O que os testes automatizados realmente protegem?
+### 21. O que acontece se o learning rate for alto demais?
 
-Eles protegem regras do experimento, como configuração inválida, split inconsistente e comportamento operacional. Eles não provam que o modelo é bom; eles reduzem risco de erro no pipeline.
+O treino pode ficar instável, a loss pode oscilar ou o modelo pode não convergir. Em fine tuning, learning rate alto é ainda mais perigoso porque pode alterar demais os pesos pré-treinados.
 
-### 22. Se fossem refazer o projeto com mais tempo, qual seria a melhoria mais importante?
+### 22. O que acontece se o learning rate for baixo demais?
 
-Validar com imagens reais fora do PlantVillage. Depois disso, faria sentido comparar backbones, fazer fine tuning progressivo e analisar melhor as classes com maior confusão.
+O treino pode ficar muito lento ou parar em uma solução pior. Por isso usamos `ReduceLROnPlateau`: quando a validação estabiliza, o learning rate é reduzido para permitir ajustes menores.
+
+### 23. Por que batch size influencia o treino?
+
+Batch size define quantas imagens entram em cada atualização de gradiente. Batches menores usam menos memória e podem introduzir mais ruído no gradiente. Batches maiores tendem a ser mais estáveis, mas exigem mais memória.
+
+### 24. O modelo sabe lidar com uma classe que não existe no treino?
+
+Não de forma confiável. Como a saída softmax sempre escolhe uma das 38 classes, uma imagem fora dessas classes ainda será forçada para alguma classe conhecida. Para lidar com desconhecidos, precisaríamos de limiar de confiança ou técnicas de out-of-distribution.
+
+### 25. Se fossem melhorar o projeto com foco em deep learning, o que fariam?
+
+Primeiro validaríamos com imagens reais fora do PlantVillage. Depois testaríamos fine tuning progressivo, augmentation mais realista, comparação com outro backbone como EfficientNet e análise das classes com maior confusão.
 
 ## Checklist de treino antes da apresentação
 
