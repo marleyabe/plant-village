@@ -345,6 +345,24 @@
         box-shadow: var(--shadow);
       }
 
+      .compact-list li {
+        font-size: 21px;
+        line-height: 1.35;
+      }
+
+      .code-line {
+        display: block;
+        padding: 14px 16px;
+        margin-top: 18px;
+        background: #17211b;
+        color: #f6f7f4;
+        border-radius: 8px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 18px;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+      }
+
       .source {
         color: var(--muted);
         font-size: 14px;
@@ -408,7 +426,7 @@
     </style>
   </head>
   <body>
-    <section class="slide" data-slide="1/12">
+    <section class="slide" data-slide="1/14">
       <header>
         <span class="brand">PlantVillage • deep learning</span>
         <span>Apresentação final • 10 a 15 minutos</span>
@@ -439,7 +457,7 @@
       </aside>
     </section>
 
-    <section class="slide" data-slide="2/12">
+    <section class="slide" data-slide="2/14">
       <header>
         <span class="brand">1. Escolha do dataset</span>
         <span>Por que PlantVillage?</span>
@@ -467,7 +485,7 @@
       <footer>A motivação principal foi técnica: usar uma base confiável para implementar o ciclo completo.</footer>
     </section>
 
-    <section class="slide" data-slide="3/12">
+    <section class="slide" data-slide="3/14">
       <header>
         <span class="brand">2. Objetivo técnico</span>
         <span>O que foi implementado?</span>
@@ -498,7 +516,7 @@
       <footer>O repositório contém código, testes, modelo treinado e artefatos do experimento.</footer>
     </section>
 
-    <section class="slide" data-slide="4/12">
+    <section class="slide" data-slide="4/14">
       <header>
         <span class="brand">3. Dataset</span>
         <span>PlantVillage via TensorFlow Datasets</span>
@@ -553,7 +571,7 @@
       <footer>Split calculado no código: 38.012 treino, 8.145 validação e 8.146 teste.</footer>
     </section>
 
-    <section class="slide" data-slide="5/12">
+    <section class="slide" data-slide="5/14">
       <header>
         <span class="brand">4. Pipeline</span>
         <span>Do dado bruto ao tensor de treino</span>
@@ -588,7 +606,7 @@
       <footer>`ExperimentConfig` valida batch, épocas, learning rate, ratios e buffers.</footer>
     </section>
 
-    <section class="slide" data-slide="6/12">
+    <section class="slide" data-slide="6/14">
       <header>
         <span class="brand">5. Modelo escolhido</span>
         <span>MobileNetV2 com transfer learning</span>
@@ -640,7 +658,7 @@
       <footer>O backbone ficou congelado no treino principal; o projeto suporta fine tuning por flag.</footer>
     </section>
 
-    <section class="slide" data-slide="7/12">
+    <section class="slide" data-slide="7/14">
       <header>
         <span class="brand">6. Treinamento</span>
         <span>Experimento final</span>
@@ -684,7 +702,7 @@
       <footer>TensorFlow criou a GPU com memory growth; o container ficou limitado a 2 CPUs e 8 GB.</footer>
     </section>
 
-    <section class="slide" data-slide="8/12">
+    <section class="slide" data-slide="8/14">
       <header>
         <span class="brand">7. Curva de treino</span>
         <span>Aprendizado e validação</span>
@@ -709,7 +727,7 @@
       <footer>Arquivo: artifacts/plots/mobilenet_full_history.png</footer>
     </section>
 
-    <section class="slide" data-slide="9/12">
+    <section class="slide" data-slide="9/14">
       <header>
         <span class="brand">8. Métricas usadas</span>
         <span>Resultado no conjunto de teste</span>
@@ -744,7 +762,7 @@
       <footer>Teste com 8.146 imagens nunca usadas para treinar os pesos.</footer>
     </section>
 
-    <section class="slide" data-slide="10/12">
+    <section class="slide" data-slide="10/14">
       <header>
         <span class="brand">9. Matriz de confusão</span>
         <span>Onde o modelo acerta e onde confunde</span>
@@ -768,7 +786,7 @@
       <footer>Arquivo: artifacts/plots/mobilenet_full_confusion_matrix.png</footer>
     </section>
 
-    <section class="slide" data-slide="11/12">
+    <section class="slide" data-slide="11/14">
       <header>
         <span class="brand">10. Demonstração</span>
         <span>Como usar o modelo treinado</span>
@@ -807,9 +825,68 @@
       <footer>`load_trained_model` mantém compatibilidade com checkpoints que usam pré-processamento MobileNetV2.</footer>
     </section>
 
-    <section class="slide" data-slide="12/12">
+    <section class="slide" data-slide="12/14">
       <header>
-        <span class="brand">11. Conclusões</span>
+        <span class="brand">11. Teste com acertos</span>
+        <span>Exemplos gerados na avaliação</span>
+      </header>
+      <main class="content grid-2">
+        <img
+          class="visual"
+          src="artifacts/plots/mobilenet_full_correct_examples.png"
+          alt="Grade com exemplos de acertos do modelo no conjunto de teste"
+        />
+        <div>
+          <h2>O modelo acerta com alta confiança em várias classes</h2>
+          <p class="lead">
+            A imagem mostra exemplos do conjunto de teste em que a classe prevista foi igual à
+            classe real. Esses exemplos foram separados automaticamente no script de avaliação.
+          </p>
+          <ul class="compact-list">
+            <li>`Blueberry___healthy` → `Blueberry___healthy`, confiança 100%.</li>
+            <li>`Tomato___Late_blight` → `Tomato___Late_blight`, confiança 100%.</li>
+            <li>`Corn___Common_rust` → `Corn___Common_rust`, confiança 100%.</li>
+          </ul>
+          <span class="code-line">Fonte: artifacts/plots/mobilenet_full_correct_examples.png</span>
+        </div>
+      </main>
+      <footer>Esses exemplos ajudam na demonstração prática do modelo treinado.</footer>
+    </section>
+
+    <section class="slide" data-slide="13/14">
+      <header>
+        <span class="brand">12. Teste com erros</span>
+        <span>Casos úteis para análise</span>
+      </header>
+      <main class="content grid-2">
+        <div>
+          <h2>Os erros mostram onde o modelo ainda confunde classes</h2>
+          <p class="lead">
+            A avaliação também salva exemplos em que a predição foi diferente da classe real. Isso
+            é importante porque mostra limitações do modelo, não apenas o resultado médio.
+          </p>
+          <ul class="compact-list">
+            <li>`Soybean___healthy` → `Apple___healthy`, confiança 99,99%.</li>
+            <li>`Tomato___Late_blight` → `Tomato___healthy`, confiança 99,98%.</li>
+            <li>`Potato___Late_blight` → `Tomato___Late_blight`, confiança 99,98%.</li>
+          </ul>
+          <div class="callout" style="margin-top: 24px">
+            Erros com alta confiança indicam que precisamos olhar para classes parecidas, qualidade
+            visual das imagens e generalização fora da base.
+          </div>
+        </div>
+        <img
+          class="visual"
+          src="artifacts/plots/mobilenet_full_error_examples.png"
+          alt="Grade com exemplos de erros do modelo no conjunto de teste"
+        />
+      </main>
+      <footer>Fonte: artifacts/reports/mobilenet_full_prediction_examples.csv</footer>
+    </section>
+
+    <section class="slide" data-slide="14/14">
+      <header>
+        <span class="brand">13. Conclusões</span>
         <span>O que aprendemos</span>
       </header>
       <main class="content">
