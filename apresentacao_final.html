@@ -16,6 +16,9 @@
         --gold: #c99232;
         --red: #b84a3a;
         --blue: #3d6f91;
+        --speaker-marley: #2f6f4e;
+        --speaker-luis: #c99232;
+        --speaker-maycon: #b84a3a;
         --shadow: 0 18px 55px rgba(23, 33, 27, 0.12);
       }
 
@@ -66,6 +69,28 @@
         bottom: 26px;
         color: var(--muted);
         font-size: 14px;
+      }
+
+      .slide::before {
+        content: "";
+        position: absolute;
+        left: 28px;
+        bottom: 30px;
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        background: var(--speaker-marley);
+        box-shadow: 0 0 0 3px rgba(47, 111, 78, 0.12);
+      }
+
+      .slide.speaker-luis::before {
+        background: var(--speaker-luis);
+        box-shadow: 0 0 0 3px rgba(201, 146, 50, 0.14);
+      }
+
+      .slide.speaker-maycon::before {
+        background: var(--speaker-maycon);
+        box-shadow: 0 0 0 3px rgba(184, 74, 58, 0.14);
       }
 
       header {
@@ -534,7 +559,7 @@
     </style>
   </head>
   <body>
-    <section class="slide" data-slide="1/14">
+    <section class="slide speaker-marley" data-slide="1/14" data-speaker="Marley">
       <header>
         <span class="brand">PlantVillage • deep learning</span>
         <span>Apresentação final • 10 a 15 minutos</span>
@@ -598,7 +623,7 @@
       </aside>
     </section>
 
-    <section class="slide" data-slide="2/14">
+    <section class="slide speaker-marley" data-slide="2/14" data-speaker="Marley">
       <header>
         <span class="brand">1. Escolha do dataset</span>
         <span>Por que PlantVillage?</span>
@@ -626,7 +651,7 @@
       <footer>A escolha da base reduziu o trabalho de limpeza e aumentou o foco no modelo.</footer>
     </section>
 
-    <section class="slide" data-slide="3/14">
+    <section class="slide speaker-marley" data-slide="3/14" data-speaker="Marley">
       <header>
         <span class="brand">2. Objetivo técnico</span>
         <span>O que foi implementado?</span>
@@ -657,7 +682,7 @@
       <footer>O repositório contém código, testes, modelo treinado e artefatos do experimento.</footer>
     </section>
 
-    <section class="slide" data-slide="4/14">
+    <section class="slide speaker-marley" data-slide="4/14" data-speaker="Marley">
       <header>
         <span class="brand">3. Dataset</span>
         <span>PlantVillage via TensorFlow Datasets</span>
@@ -712,7 +737,7 @@
       <footer>Split calculado no código: 38.012 treino, 8.145 validação e 8.146 teste.</footer>
     </section>
 
-    <section class="slide" data-slide="5/14">
+    <section class="slide speaker-marley" data-slide="5/14" data-speaker="Marley">
       <header>
         <span class="brand">4. Pipeline</span>
         <span>Do dado bruto ao tensor de treino</span>
@@ -750,7 +775,7 @@ val_ds = bundle.val</code></pre>
       <footer>`ExperimentConfig` valida batch, épocas, learning rate, ratios e buffers.</footer>
     </section>
 
-    <section class="slide" data-slide="6/14">
+    <section class="slide speaker-luis" data-slide="6/14" data-speaker="Luis Pedro">
       <header>
         <span class="brand">5. Modelo escolhido</span>
         <span>MobileNetV2 com transfer learning</span>
@@ -808,7 +833,7 @@ val_ds = bundle.val</code></pre>
       <footer>O backbone ficou congelado no treino principal; o projeto suporta fine tuning por flag.</footer>
     </section>
 
-    <section class="slide" data-slide="7/14">
+    <section class="slide speaker-luis" data-slide="7/14" data-speaker="Luis Pedro">
       <header>
         <span class="brand">6. Treinamento</span>
         <span>Experimento final</span>
@@ -852,7 +877,7 @@ val_ds = bundle.val</code></pre>
       <footer>TensorFlow criou a GPU com memory growth; o container ficou limitado a 2 CPUs e 8 GB.</footer>
     </section>
 
-    <section class="slide" data-slide="8/14">
+    <section class="slide speaker-luis" data-slide="8/14" data-speaker="Luis Pedro">
       <header>
         <span class="brand">7. Curva de treino</span>
         <span>Aprendizado e validação</span>
@@ -877,7 +902,7 @@ val_ds = bundle.val</code></pre>
       <footer>Arquivo: artifacts/plots/mobilenet_full_history.png</footer>
     </section>
 
-    <section class="slide" data-slide="9/14">
+    <section class="slide speaker-luis" data-slide="9/14" data-speaker="Luis Pedro">
       <header>
         <span class="brand">8. Métricas usadas</span>
         <span>Resultado no conjunto de teste</span>
@@ -912,7 +937,7 @@ val_ds = bundle.val</code></pre>
       <footer>Teste com 8.146 imagens nunca usadas para treinar os pesos.</footer>
     </section>
 
-    <section class="slide" data-slide="10/14">
+    <section class="slide speaker-luis" data-slide="10/14" data-speaker="Luis Pedro">
       <header>
         <span class="brand">9. Matriz de confusão</span>
         <span>Onde o modelo acerta e onde confunde</span>
@@ -936,7 +961,7 @@ val_ds = bundle.val</code></pre>
       <footer>Arquivo: artifacts/plots/mobilenet_full_confusion_matrix.png</footer>
     </section>
 
-    <section class="slide" data-slide="11/14">
+    <section class="slide speaker-maycon" data-slide="11/14" data-speaker="Maycon">
       <header>
         <span class="brand">10. Demonstração</span>
         <span>Como usar o modelo treinado</span>
@@ -977,7 +1002,7 @@ confidence = pred.max()</code></pre>
       <footer>`load_trained_model` mantém compatibilidade com checkpoints que usam pré-processamento MobileNetV2.</footer>
     </section>
 
-    <section class="slide" data-slide="12/14">
+    <section class="slide speaker-maycon" data-slide="12/14" data-speaker="Maycon">
       <header>
         <span class="brand">11. Teste com acertos</span>
         <span>Exemplos gerados na avaliação</span>
@@ -1004,7 +1029,7 @@ confidence = pred.max()</code></pre>
       <footer>Imagem gerada pelo script de avaliação.</footer>
     </section>
 
-    <section class="slide" data-slide="13/14">
+    <section class="slide speaker-maycon" data-slide="13/14" data-speaker="Maycon">
       <header>
         <span class="brand">12. Teste com erros</span>
         <span>Casos úteis para análise</span>
@@ -1033,7 +1058,7 @@ confidence = pred.max()</code></pre>
       <footer>Fonte: artifacts/reports/mobilenet_full_prediction_examples.csv</footer>
     </section>
 
-    <section class="slide" data-slide="14/14">
+    <section class="slide speaker-maycon" data-slide="14/14" data-speaker="Maycon">
       <header>
         <span class="brand">13. Conclusões</span>
         <span>O que aprendemos</span>
