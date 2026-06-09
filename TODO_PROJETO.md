@@ -17,7 +17,7 @@ O PlantVillage possui imagens de folhas saudáveis e doentes, organizadas por es
 
 O trabalho consiste em treinar uma rede neural convolucional com TensorFlow para classificar imagens de folhas de plantas. A entrada do sistema será uma imagem de folha; a saída será a classe prevista, indicando se a folha está saudável ou qual doença foi identificada.
 
-Para manter o escopo viável, o projeto pode usar apenas um subconjunto da base, por exemplo classes de tomate ou batata. Essa escolha reduz o tempo de treinamento e facilita a análise dos erros.
+O experimento principal deve usar o máximo possível da base PlantVillage, preferencialmente as 54.303 imagens e 38 classes. Um subconjunto reduzido pode ser usado apenas durante o desenvolvimento para validar rapidamente o código, mas os resultados finais devem priorizar a base completa.
 
 ## Objetivo
 
@@ -27,35 +27,36 @@ Desenvolver e avaliar um classificador de imagens capaz de reconhecer doenças e
 
 ### 1. Ambiente
 
-- [ ] Criar o ambiente Python do projeto.
+- [x] Criar a configuracao do ambiente Python do projeto com uv.
 
 ### 2. Dataset
 
-- [ ] Baixar e organizar o PlantVillage em treino, validação e teste.
+- [x] Baixar e organizar o PlantVillage completo em treino, validação e teste.
 
 ### 3. Pré-processamento
 
-- [ ] Padronizar as imagens e aplicar aumento de dados quando necessário.
+- [x] Implementar padronizacao das imagens e aumento de dados no pipeline.
 
 ### 4. Modelo
 
-- [ ] Definir e implementar a rede convolucional em TensorFlow.
+- [x] Definir e implementar CNN baseline e MobileNetV2 com transfer learning.
 
 ### 5. Treinamento
 
-- [ ] Treinar o classificador e registrar o histórico de perda e acurácia.
+- [x] Treinar o classificador e registrar o histórico de perda e acurácia.
 
 ### 6. Avaliação
 
-- [ ] Avaliar o modelo com métricas, matriz de confusão e exemplos de acertos e erros.
+- [x] Implementar avaliação com métricas, matriz de confusão e exemplos de acertos e erros.
 
 ### 7. Análise
 
-- [ ] Interpretar os resultados, apontar limitações da base e sugerir melhorias.
+- [x] Interpretar os resultados, apontar limitações da base e sugerir melhorias.
 
 ### 8. Entrega
 
-- [ ] Organizar código, relatório, gráficos e slides da apresentação.
+- [x] Organizar código, modelo treinado, métricas e gráficos no repositório.
+- [ ] Preparar relatório textual final e slides da apresentação.
 
 ## Resultados esperados
 

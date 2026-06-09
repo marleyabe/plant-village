@@ -1,0 +1,41 @@
+actual,predicted,confidence,correct
+Blueberry___healthy,Blueberry___healthy,1.0,True
+Peach___Bacterial_spot,Peach___Bacterial_spot,1.0,True
+Grape___Esca_(Black_Measles),Grape___Esca_(Black_Measles),1.0,True
+Tomato___Late_blight,Tomato___Late_blight,1.0,True
+Orange___Haunglongbing_(Citrus_greening),Orange___Haunglongbing_(Citrus_greening),1.0,True
+Orange___Haunglongbing_(Citrus_greening),Orange___Haunglongbing_(Citrus_greening),1.0,True
+Grape___healthy,Grape___healthy,1.0,True
+Corn___Common_rust,Corn___Common_rust,1.0,True
+Soybean___healthy,Soybean___healthy,1.0,True
+Squash___Powdery_mildew,Squash___Powdery_mildew,1.0,True
+Tomato___Tomato_Yellow_Leaf_Curl_Virus,Tomato___Tomato_Yellow_Leaf_Curl_Virus,1.0,True
+Squash___Powdery_mildew,Squash___Powdery_mildew,1.0,True
+Squash___Powdery_mildew,Squash___Powdery_mildew,1.0,True
+Orange___Haunglongbing_(Citrus_greening),Orange___Haunglongbing_(Citrus_greening),1.0,True
+Orange___Haunglongbing_(Citrus_greening),Orange___Haunglongbing_(Citrus_greening),1.0,True
+Corn___healthy,Corn___healthy,1.0,True
+Orange___Haunglongbing_(Citrus_greening),Orange___Haunglongbing_(Citrus_greening),1.0,True
+Squash___Powdery_mildew,Squash___Powdery_mildew,1.0,True
+Tomato___Tomato_Yellow_Leaf_Curl_Virus,Tomato___Tomato_Yellow_Leaf_Curl_Virus,1.0,True
+Squash___Powdery_mildew,Squash___Powdery_mildew,1.0,True
+Soybean___healthy,Apple___healthy,0.9999990463256836,False
+Tomato___Late_blight,Tomato___healthy,0.9998835325241089,False
+Tomato___Septoria_leaf_spot,Tomato___healthy,0.999821126461029,False
+Potato___Late_blight,Tomato___Late_blight,0.999790370464325,False
+Strawberry___Leaf_scorch,Corn___Northern_Leaf_Blight,0.9994970560073853,False
+Grape___Black_rot,Grape___Esca_(Black_Measles),0.999461829662323,False
+Tomato___Late_blight,Potato___Late_blight,0.9994152784347534,False
+Corn___Cercospora_leaf_spot Gray_leaf_spot,Corn___Northern_Leaf_Blight,0.9993602633476257,False
+Corn___Cercospora_leaf_spot Gray_leaf_spot,Corn___Northern_Leaf_Blight,0.9992257356643677,False
+Potato___Late_blight,Tomato___Late_blight,0.9990536570549011,False
+Tomato___Target_Spot,Tomato___healthy,0.9988642930984497,False
+Tomato___Target_Spot,"Pepper,_bell___Bacterial_spot",0.9985263347625732,False
+Tomato___Septoria_leaf_spot,Tomato___healthy,0.9969789981842041,False
+Apple___Apple_scab,Apple___healthy,0.9965492486953735,False
+Tomato___healthy,Squash___Powdery_mildew,0.9965028762817383,False
+Tomato___Tomato_Yellow_Leaf_Curl_Virus,Tomato___Spider_mites Two-spotted_spider_mite,0.9951260685920715,False
+Apple___Black_rot,Cherry___healthy,0.9942902326583862,False
+Corn___Common_rust,Corn___Northern_Leaf_Blight,0.9938560128211975,False
+Potato___Early_blight,Potato___Late_blight,0.9929393529891968,False
+Apple___healthy,Apple___Black_rot,0.9913613200187683,False

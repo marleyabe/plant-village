@@ -1,0 +1,2 @@
+"""PlantVillage disease classification project."""
+

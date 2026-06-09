@@ -203,8 +203,16 @@ cython_debug/
 # Temporary file for partial code execution
 tempCodeRunnerFile.py
 
+# Project data and generated artifacts
+data/
+artifacts/checkpoints/
+artifacts/tfds/
+
 # Ruff stuff:
 .ruff_cache/
+.uv-cache/
+.pytest_cache/
+.keras/
 
 # PyPI configuration file
 .pypirc
