@@ -415,11 +415,11 @@
       </header>
       <main class="content grid-2">
         <div>
-          <p class="kicker">Problema escolhido</p>
-          <h1>Classificacao de doencas em folhas de plantas</h1>
+          <p class="kicker">Projeto de Deep Learning</p>
+          <h1>Classificacao multiclasse com PlantVillage</h1>
           <p class="lead">
-            Como transformar uma foto de folha em uma previsao objetiva sobre saude ou doenca
-            usando redes neurais convolucionais?
+            Usamos uma base publica e conhecida para aplicar conceitos de CNN, transfer learning,
+            pipeline de dados, treino, avaliacao e reproducibilidade.
           </p>
           <div class="tag-row">
             <span class="tag">TensorFlow</span>
@@ -434,68 +434,68 @@
       </main>
       <footer>Equipe: Marley Abe Silva, Luis Pedro de Castro Alves e Maycon Moriy Abe Machado</footer>
       <aside class="notes">
-        Abrir com o problema concreto: uma decisao agricola depende de identificar sinais visuais
-        cedo. A historia da apresentacao segue problema, dados, metodo, evidencia e conclusao.
+        Abrir posicionando o trabalho como aplicacao tecnica de deep learning em uma base
+        consolidada, com foco em pipeline, arquitetura e metricas.
       </aside>
     </section>
 
     <section class="slide" data-slide="2/12">
       <header>
-        <span class="brand">1. Contexto</span>
-        <span>Por que este problema importa?</span>
+        <span class="brand">1. Escolha do dataset</span>
+        <span>Por que PlantVillage?</span>
       </header>
       <main class="content">
         <p class="quote">
-          A folha e um dos primeiros lugares onde a planta <em>mostra sinais de estresse</em>.
-          O desafio e transformar esse sinal visual em uma classificacao consistente.
+          A base PlantVillage foi escolhida por ser <em>publica, conhecida e pronta para
+          classificacao supervisionada</em>, permitindo focar na implementacao tecnica do modelo.
         </p>
         <div class="grid-3" style="margin-top: 42px">
           <div class="panel">
-            <h3>Impacto pratico</h3>
-            <p>Identificar doencas mais cedo pode apoiar manejo, triagem e acompanhamento.</p>
+            <h3>Base conhecida</h3>
+            <p>Dataset documentado no TensorFlow Datasets, com classes e metadados padronizados.</p>
           </div>
           <div class="panel">
-            <h3>Problema visual</h3>
-            <p>Manchas, cores e textura variam entre especies, doencas e folhas saudaveis.</p>
+            <h3>Escopo adequado</h3>
+            <p>Quantidade suficiente de imagens para treinar e avaliar uma CNN com rigor.</p>
           </div>
           <div class="panel">
-            <h3>Objetivo tecnico</h3>
-            <p>Treinar um classificador que receba uma imagem e retorne uma das 38 classes.</p>
+            <h3>Foco do trabalho</h3>
+            <p>Aplicar Deep Learning: pipeline, transfer learning, treino, metricas e demonstracao.</p>
           </div>
         </div>
       </main>
-      <footer>Mensagem central: automatizar uma leitura visual, mas com consciencia das limitacoes.</footer>
+      <footer>A motivacao principal foi tecnica: usar uma base confiavel para implementar o ciclo completo.</footer>
     </section>
 
     <section class="slide" data-slide="3/12">
       <header>
-        <span class="brand">2. Motivacao</span>
-        <span>Por que usar Deep Learning?</span>
+        <span class="brand">2. Objetivo tecnico</span>
+        <span>O que foi implementado?</span>
       </header>
       <main class="content grid-2">
         <div>
-          <h2>O problema nao e apenas detectar uma mancha</h2>
+          <h2>Construir um classificador reprodutivel de 38 classes</h2>
           <p class="lead">
-            A mesma doenca pode aparecer com intensidade diferente, e classes diferentes podem
-            compartilhar padroes visuais parecidos.
+            O objetivo foi transformar o dataset em um experimento completo: carregamento,
+            pre-processamento, modelo, treino, avaliacao e script de predicao.
           </p>
         </div>
         <div class="timeline">
           <div class="step">
             <b>1</b>
-            <p>Extrair caracteristicas manualmente seria fragil para 38 classes.</p>
+            <p>Organizar o projeto como pacote Python com scripts CLI.</p>
           </div>
           <div class="step">
             <b>2</b>
-            <p>CNNs aprendem padroes de borda, cor, textura e forma diretamente das imagens.</p>
+            <p>Treinar uma CNN baseline e um modelo com transfer learning.</p>
           </div>
           <div class="step">
             <b>3</b>
-            <p>Transfer learning aproveita conhecimento visual aprendido em grandes bases.</p>
+            <p>Registrar modelo, metricas, graficos, relatorios e metadata do experimento.</p>
           </div>
         </div>
       </main>
-      <footer>Decisao: comparar baseline simples com MobileNetV2 pre-treinada.</footer>
+      <footer>O repositorio contem codigo, testes, modelo treinado e artefatos do experimento.</footer>
     </section>
 
     <section class="slide" data-slide="4/12">
@@ -504,7 +504,7 @@
         <span>PlantVillage via TensorFlow Datasets</span>
       </header>
       <main class="content">
-        <h2>Uma base grande, organizada e adequada para classificacao supervisionada</h2>
+        <h2>Dados padronizados para um problema de classificacao multiclasse</h2>
         <div class="grid-3">
           <div class="metric panel">
             <strong>54.303</strong>
@@ -516,7 +516,7 @@
           </div>
           <div class="metric panel">
             <strong>224</strong>
-            <span>pixels por lado na entrada do modelo</span>
+            <span>pixels por lado apos redimensionamento</span>
           </div>
         </div>
         <table class="table" style="margin-top: 32px">
@@ -550,7 +550,7 @@
           </tbody>
         </table>
       </main>
-      <footer>Split deterministico com seed fixa para permitir reproducao.</footer>
+      <footer>Split calculado no codigo: 38.012 treino, 8.145 validacao e 8.146 teste.</footer>
     </section>
 
     <section class="slide" data-slide="5/12">
@@ -560,32 +560,32 @@
       </header>
       <main class="content grid-2">
         <div>
-          <h2>O pipeline foi desenhado para ser reproduzivel e leve</h2>
+          <h2>Pipeline `tf.data` com controle de determinismo e recursos</h2>
           <p class="lead">
-            Depois de um problema de consumo excessivo de recursos, limitamos explicitamente
-            paralelismo, shuffle, prefetch e memoria da GPU.
+            A carga dos dados foi implementada em `src/plant_village/data.py`, com validacao de
+            regras e buffers limitados para evitar uso excessivo de CPU/RAM.
           </p>
         </div>
         <div class="timeline">
           <div class="step">
             <b>A</b>
-            <p>Carregar PlantVillage com `tfds.load` e `shuffle_files=False`.</p>
+            <p>`tfds.load("plant_village", as_supervised=True, shuffle_files=False)`.</p>
           </div>
           <div class="step">
             <b>B</b>
-            <p>Aplicar split 70/15/15 com seed fixa.</p>
+            <p>Shuffle deterministico antes do split 70/15/15.</p>
           </div>
           <div class="step">
             <b>C</b>
-            <p>Redimensionar para 224x224 e converter para `float32`.</p>
+            <p>`tf.image.resize`, cast para `float32`, batch e prefetch controlado.</p>
           </div>
           <div class="step">
             <b>D</b>
-            <p>Aplicar aumento de dados apenas durante treino.</p>
+            <p>Data augmentation fica dentro do modelo e roda apenas em treino.</p>
           </div>
         </div>
       </main>
-      <footer>Boas praticas: determinismo, validacao de config e uso conservador de recursos.</footer>
+      <footer>`ExperimentConfig` valida batch, epocas, learning rate, ratios e buffers.</footer>
     </section>
 
     <section class="slide" data-slide="6/12">
@@ -595,12 +595,13 @@
       </header>
       <main class="content grid-2">
         <div class="panel">
-          <h2>Por que MobileNetV2?</h2>
+          <h2>Arquitetura do modelo final</h2>
           <ul>
-            <li>Boa relacao entre desempenho e custo computacional.</li>
-            <li>Arquitetura adequada para imagens 224x224.</li>
-            <li>Pesos pre-treinados no ImageNet aceleram o aprendizado.</li>
-            <li>Camada final adaptada para 38 classes do PlantVillage.</li>
+            <li>Entrada `224x224x3`.</li>
+            <li>Aumento de dados: flip horizontal, rotacao 0.08 e zoom 0.10.</li>
+            <li>Pre-processamento MobileNetV2: escala para intervalo `[-1, 1]`.</li>
+            <li>Backbone MobileNetV2 `include_top=False`, pesos ImageNet.</li>
+            <li>Cabecalho: GlobalAveragePooling2D, Dropout 0.3 e Dense softmax.</li>
           </ul>
         </div>
         <div>
@@ -614,11 +615,11 @@
             <tbody>
               <tr>
                 <td>Data augmentation</td>
-                <td>Reduzir dependencia de variacoes simples da imagem</td>
+                <td>Regularizacao visual no treino</td>
               </tr>
               <tr>
                 <td>MobileNetV2</td>
-                <td>Extrair caracteristicas visuais</td>
+                <td>Backbone convolucional pre-treinado</td>
               </tr>
               <tr>
                 <td>GlobalAveragePooling2D</td>
@@ -626,7 +627,7 @@
               </tr>
               <tr>
                 <td>Dropout</td>
-                <td>Reduzir overfitting</td>
+                <td>Regularizacao do classificador</td>
               </tr>
               <tr>
                 <td>Dense softmax</td>
@@ -636,7 +637,7 @@
           </table>
         </div>
       </main>
-      <footer>Tambem existe uma CNN baseline no codigo para comparacao e validacao.</footer>
+      <footer>O backbone ficou congelado no treino principal; o projeto suporta fine tuning por flag.</footer>
     </section>
 
     <section class="slide" data-slide="7/12">
@@ -646,7 +647,7 @@
       </header>
       <main class="content grid-2">
         <div>
-          <h2>Treinamos com GPU, mas com limites para preservar a maquina</h2>
+          <h2>Treinamento controlado em Docker com GPU NVIDIA</h2>
           <div class="grid-2">
             <div class="metric quiet-panel">
               <strong>20</strong>
@@ -667,8 +668,10 @@
           </div>
         </div>
         <div class="panel">
-          <h3>Callbacks</h3>
+          <h3>Hiperparametros e callbacks</h3>
           <ul>
+            <li>Otimizador Adam com learning rate inicial `1e-3`.</li>
+            <li>Loss `sparse_categorical_crossentropy`.</li>
             <li>Checkpoint pelo melhor `val_accuracy`.</li>
             <li>EarlyStopping monitorando `val_loss`.</li>
             <li>ReduceLROnPlateau para reduzir learning rate.</li>
@@ -678,7 +681,7 @@
           </div>
         </div>
       </main>
-      <footer>O treino completo gerou modelo, historico, grafico e metadados.</footer>
+      <footer>TensorFlow criou a GPU com memory growth; o container ficou limitado a 2 CPUs e 8 GB.</footer>
     </section>
 
     <section class="slide" data-slide="8/12">
@@ -688,13 +691,13 @@
       </header>
       <main class="content grid-2">
         <div>
-          <h2>A validacao estabilizou perto de 96%</h2>
+          <h2>Comportamento do treino</h2>
           <p class="lead">
-            A evolucao mostra ganho rapido nas primeiras epocas, seguido por ajustes menores
-            quando o learning rate foi reduzido.
+            A validacao melhorou rapidamente no inicio e depois passou por ajustes menores. O
+            learning rate foi reduzido automaticamente quando `val_loss` parou de melhorar.
           </p>
           <div class="callout">
-            Melhor validacao observada: `val_accuracy = 0.9596`.
+            Melhor `val_accuracy`: 0.9596. Menor `val_loss`: 0.1319.
           </div>
         </div>
         <img
@@ -712,7 +715,7 @@
         <span>Resultado no conjunto de teste</span>
       </header>
       <main class="content">
-        <h2>O desempenho final foi medido em dados separados do treino</h2>
+        <h2>Metricas no conjunto de teste</h2>
         <div class="grid-3">
           <div class="metric panel">
             <strong>95,40%</strong>
@@ -730,11 +733,11 @@
         <div class="grid-2" style="margin-top: 32px">
           <div class="quiet-panel">
             <h3>Por que accuracy?</h3>
-            <p>Mede o percentual total de acertos e e facil de comunicar.</p>
+            <p>Mede o acerto global em todas as 8.146 imagens do teste.</p>
           </div>
           <div class="quiet-panel">
-            <h3>Por que F1?</h3>
-            <p>Combina precision e recall, ajudando a enxergar desempenho alem do acerto bruto.</p>
+            <h3>Macro vs weighted F1</h3>
+            <p>Macro trata classes igualmente; weighted pondera pelo suporte de cada classe.</p>
           </div>
         </div>
       </main>
@@ -753,11 +756,12 @@
           alt="Matriz de confusao do MobileNetV2 no PlantVillage"
         />
         <div>
-          <h2>Nem todo erro tem o mesmo peso explicativo</h2>
+          <h2>Analise tecnica dos erros</h2>
           <ul>
-            <li>Classes visualmente parecidas tendem a concentrar confusoes.</li>
-            <li>A matriz mostra se o erro e isolado ou sistematico.</li>
-            <li>Esse grafico orienta onde melhorar dados, augmentations ou fine tuning.</li>
+            <li>A matriz permite identificar confusoes recorrentes entre classes.</li>
+            <li>Erros concentrados sugerem classes visualmente proximas ou baixa separabilidade.</li>
+            <li>O relatorio por classe permite comparar precision, recall, F1 e suporte.</li>
+            <li>Proximos ajustes tecnicos: fine tuning, augmentation mais forte e analise por classe.</li>
           </ul>
         </div>
       </main>
@@ -771,10 +775,10 @@
       </header>
       <main class="content grid-2">
         <div>
-          <h2>Entrada: uma imagem de folha. Saida: classe prevista e confianca.</h2>
+          <h2>Fluxo de inferencia</h2>
           <p class="lead">
-            A demonstracao pode ser feita pelo script `plant-predict`, usando o modelo treinado
-            versionado no repositorio.
+            A demonstracao usa o modelo serializado em `.keras`, o metadata com a ordem das classes
+            e o mesmo redimensionamento aplicado durante o treino.
           </p>
           <div class="callout">
             Comando: `uv run plant-predict artifacts/models/mobilenet_full.keras imagem.jpg
@@ -784,23 +788,23 @@
         <div class="timeline">
           <div class="step">
             <b>1</b>
-            <p>Carregar imagem enviada pelo usuario.</p>
+            <p>`tf.io.read_file` e `tf.image.decode_image(channels=3)`.</p>
           </div>
           <div class="step">
             <b>2</b>
-            <p>Redimensionar para 224x224.</p>
+            <p>`tf.image.resize` para `(224, 224)` e cast para `float32`.</p>
           </div>
           <div class="step">
             <b>3</b>
-            <p>Rodar o modelo `mobilenet_full.keras`.</p>
+            <p>`model.predict` retorna vetor de probabilidade com 38 posicoes.</p>
           </div>
           <div class="step">
             <b>4</b>
-            <p>Exibir classe prevista e confianca.</p>
+            <p>`argmax` seleciona a classe e `max` calcula a confianca.</p>
           </div>
         </div>
       </main>
-      <footer>Para a apresentacao ao vivo, separar uma imagem de exemplo antes da aula.</footer>
+      <footer>`load_trained_model` mantem compatibilidade com checkpoints que usam preprocessamento MobileNetV2.</footer>
     </section>
 
     <section class="slide" data-slide="12/12">
@@ -809,28 +813,28 @@
         <span>O que aprendemos</span>
       </header>
       <main class="content">
-        <h2>O modelo funciona bem na base, mas o contexto do dado importa</h2>
+        <h2>Conclusoes tecnicas</h2>
         <div class="grid-3">
           <div class="panel">
-            <h3>Conclusao tecnica</h3>
-            <p>MobileNetV2 atingiu 95,40% de acuracia no teste com custo computacional controlado.</p>
+            <h3>Modelo</h3>
+            <p>MobileNetV2 com transfer learning atingiu 95,40% de acuracia no teste.</p>
           </div>
           <div class="panel">
-            <h3>Conclusao de produto</h3>
-            <p>O modelo pode apoiar triagem visual, mas nao substitui validacao agronomica.</p>
+            <h3>Engenharia</h3>
+            <p>O projeto ficou reprodutivel: CLI, testes, metadata, modelo e artefatos versionados.</p>
           </div>
           <div class="panel">
-            <h3>Proximo passo</h3>
-            <p>Testar com fotos reais de campo e medir queda de desempenho fora do PlantVillage.</p>
+            <h3>Limite</h3>
+            <p>PlantVillage e uma base controlada; generalizacao externa exige validacao adicional.</p>
           </div>
         </div>
         <p class="source" style="margin-top: 34px">
-          Estrutura narrativa baseada em recomendacoes de comunicacao cientifica: definir mensagem
-          central, adaptar ao publico e encadear motivacao, metodo, resultados e impacto. Referencias:
-          MIT Communication Lab, Harvard Catalyst, Stanford Medicine e University of Illinois.
+          Proximos passos tecnicos: fine tuning progressivo, validacao fora do PlantVillage,
+          comparacao com EfficientNet, analise por classe e teste com imagens reais capturadas
+          em condicoes menos controladas.
         </p>
       </main>
-      <footer>Mensagem final: resultado forte, reproducivel e com limitacoes declaradas.</footer>
+      <footer>Mensagem final: aplicamos Deep Learning de ponta a ponta em uma base conhecida e reprodutivel.</footer>
     </section>
   </body>
 </html>
