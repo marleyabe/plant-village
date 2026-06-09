@@ -266,137 +266,97 @@ Fechamento possível:
 
 > "O principal resultado não é só a acurácia. O projeto entrega um pipeline completo e reprodutível, com modelo treinado, avaliação, artefatos e análise dos limites."
 
-## Perguntas prováveis do professor
+## Pegadinhas e perguntas além dos slides
 
-### 1. Por que vocês escolheram o PlantVillage?
+Esta seção remove perguntas óbvias que já estão respondidas diretamente nos slides, como quantidade de classes, épocas ou acurácia. O foco aqui é treinar respostas para perguntas que exigem justificativa técnica.
 
-Porque é uma base conhecida, pública e disponível no TensorFlow Datasets. As imagens já estão organizadas em classes, o que permitiu focar em deep learning, transfer learning, avaliação e reprodutibilidade.
+### 1. A acurácia alta prova que o modelo funciona em fotos reais?
 
-### 2. Quantas classes existem no problema?
+Não. A acurácia alta prova bom desempenho no teste do PlantVillage. Como a base é controlada, com folha centralizada, boa iluminação e fundo mais padronizado, ainda precisamos validar com fotos reais fora da base para falar em generalização para campo.
 
-São 38 classes. Elas combinam espécie da planta e condição da folha, por exemplo `Tomato___Late_blight` ou `Apple___healthy`.
+### 2. Existe risco de vazamento de dados no split?
 
-### 3. Quantas imagens foram usadas?
+O split foi feito de forma determinística e o teste ficou separado do treino. O principal ponto de atenção é que o PlantVillage pode ter imagens muito parecidas dentro da mesma base. Então, mesmo sem usar o teste no treino, a validação externa ainda é importante.
 
-Foram 54.303 imagens no total. O split foi 70/15/15:
+### 3. Por que não usar cross-validation?
 
-- 38.012 treino
-- 8.145 validação
-- 8.146 teste
+Cross-validation aumentaria muito o custo porque exigiria treinar o modelo várias vezes. Para uma base com 54.303 imagens e treino com CNN, o split fixo 70/15/15 é uma escolha mais simples, reprodutível e adequada para o escopo do trabalho.
 
-### 4. O conjunto de teste foi usado no treino?
+### 4. Por que o F1 macro ficou menor que o F1 ponderado?
 
-Não. O teste foi separado antes da avaliação final. Ele foi usado apenas para medir o desempenho depois do treino.
+O F1 macro dá o mesmo peso para todas as classes. Se algumas classes menores ou mais difíceis tiverem desempenho pior, ele cai mais. O F1 ponderado considera o número de exemplos por classe, por isso tende a ficar mais próximo da acurácia.
 
-### 5. Por que usar MobileNetV2 em vez de treinar uma CNN do zero?
+### 5. Se o modelo erra com 99% de confiança, a confiança não serve?
 
-MobileNetV2 já vem pré-treinada no ImageNet e aprende características visuais gerais. Com transfer learning, o treino fica mais eficiente e tende a performar melhor do que uma CNN simples treinada do zero, principalmente em um projeto acadêmico com tempo limitado.
+Serve, mas precisa ser interpretada com cuidado. A softmax distribui probabilidade apenas entre as classes conhecidas. Se a imagem parece muito com uma classe errada para o modelo, ele pode errar com confiança alta. Isso não é uma garantia de certeza real.
 
-### 6. O que significa transfer learning?
+### 6. Por que congelar o backbone em vez de fazer fine tuning direto?
 
-É reaproveitar uma rede já treinada em uma base grande e adaptar o classificador final para um novo problema. Neste projeto, usamos a MobileNetV2 como extratora de características e treinamos a saída para 38 classes.
+Congelar o backbone reduz custo, risco de overfitting e instabilidade no treino. Como a MobileNetV2 já vem pré-treinada, primeiro treinamos o classificador final. Fine tuning pode ser um próximo passo, mas deve ser feito com learning rate menor e controle por validação.
 
-### 7. O backbone foi treinado?
+### 7. O que poderia dar errado ao fazer fine tuning?
 
-No treino principal, não. O backbone ficou congelado (`fine_tune=False`). O projeto suporta fine tuning por flag, mas o resultado final apresentado usa o backbone congelado.
+Se destravarmos muitas camadas com learning rate alto, o modelo pode perder parte dos pesos úteis aprendidos no ImageNet ou overfitar ao PlantVillage. O ideal seria destravar poucas camadas finais, reduzir o learning rate e comparar no conjunto de validação.
 
-### 8. Por que a entrada é 224x224?
+### 8. Por que augmentation simples pode não ser suficiente?
 
-Porque é um tamanho padrão para modelos pré-treinados como MobileNetV2. Redimensionar todas as imagens para 224x224 também padroniza o batch de entrada.
+Flip, rotação e zoom ajudam, mas fotos reais podem ter variações maiores: sombra, fundo complexo, folha parcialmente cortada, blur, ângulo diferente e iluminação ruim. Para aproximar uso real, seria necessário augmentation mais forte e validação fora do PlantVillage.
 
-### 9. O que é data augmentation?
+### 9. O modelo classifica a doença ou só reconhece padrões da base?
 
-É aplicar transformações nas imagens de treino, como flip, rotação e zoom, para aumentar a variação visual e reduzir overfitting. No projeto, augmentation é aplicado apenas no treino.
+Tecnicamente, ele aprende padrões visuais associados às classes do dataset. Se a base tiver viés de fundo, iluminação ou enquadramento, o modelo pode usar esses sinais também. Por isso a validação externa é essencial.
 
-### 10. Por que augmentation não roda na validação e no teste?
+### 10. Por que não basta mostrar exemplos de acerto?
 
-Porque validação e teste devem medir o desempenho em dados fixos. Se aplicássemos augmentation nesses conjuntos, a avaliação poderia variar e ficaria menos reprodutível.
+Exemplos de acerto ajudam na demonstração, mas podem ser selecionados e não representam o comportamento geral. O resultado precisa ser sustentado por métricas no teste, matriz de confusão e análise de erros.
 
-### 11. Qual loss foi usada?
+### 11. Como vocês sabem que o modelo não decorou o treino?
 
-`sparse_categorical_crossentropy`, porque o problema é multiclasse e os rótulos são inteiros, não one-hot encoded.
+Não dá para afirmar só olhando o treino. A evidência contra memorização forte é o desempenho em validação e teste separados. Mesmo assim, como o teste vem da mesma base, a prova mais forte seria avaliar com imagens externas.
 
-### 12. Qual otimizador foi usado?
+### 12. Por que usar `sparse_categorical_crossentropy` e não `categorical_crossentropy`?
 
-Adam com learning rate inicial `1e-3`.
+Porque os rótulos do dataset são inteiros. `categorical_crossentropy` seria mais adequada se os rótulos estivessem em one-hot encoding. Usar `sparse_categorical_crossentropy` evita uma transformação desnecessária.
 
-### 13. Quantas épocas foram usadas?
+### 13. O que aconteceria se data augmentation fosse aplicado no teste?
 
-20 épocas no experimento final.
+O teste deixaria de ser um conjunto fixo e a métrica poderia variar conforme as transformações. Isso prejudica a comparação e a reprodutibilidade. Por isso augmentation fica apenas no treino.
 
-### 14. Por que batch size 8?
+### 14. Por que salvar metadata junto com o modelo?
 
-Foi uma escolha conservadora para caber na GPU disponível e reduzir risco de uso excessivo de memória. Como o treino foi feito em Docker com limites de recurso, batch 8 foi mais seguro.
+O metadata guarda informações como classes, tamanho da imagem, batch e seed. Isso evita avaliar ou predizer com configuração diferente da usada no treino, principalmente a ordem das classes.
 
-### 15. O que significa acurácia de 95,40%?
+### 15. O que garante que a ordem das classes está correta na predição?
 
-Significa que, no conjunto de teste com 8.146 imagens, o modelo acertou aproximadamente 95,40% das previsões.
+O script de predição usa o metadata salvo. Sem isso, poderíamos carregar o modelo corretamente, mas interpretar o índice de saída com uma lista de classes em ordem errada.
 
-### 16. O que é F1 macro?
+### 16. Por que o batch size foi tão baixo?
 
-É a média do F1 calculado por classe, dando o mesmo peso para todas as classes. Ele ajuda a avaliar se o modelo performa bem de forma equilibrada.
+Foi uma escolha conservadora para caber na GPU e evitar uso excessivo de memória. O foco era concluir o experimento completo com estabilidade, não maximizar throughput.
 
-### 17. O que é F1 ponderado?
+### 17. A GPU muda o resultado do modelo?
 
-É o F1 calculado considerando o suporte de cada classe. Classes com mais imagens têm peso maior no resultado final.
+Em princípio, a GPU muda principalmente a velocidade. Pequenas diferenças numéricas podem acontecer por operações paralelas, mas a configuração com seed e split fixos ajuda a manter o experimento controlado.
 
-### 18. Por que F1 macro é menor que F1 ponderado?
+### 18. O que vocês fariam se a matriz de confusão mostrasse erro concentrado em poucas classes?
 
-Isso pode indicar que algumas classes menores ou mais difíceis tiveram desempenho um pouco pior. O F1 ponderado fica mais próximo da acurácia porque considera a distribuição de exemplos.
+Olharíamos essas classes no relatório por classe, revisaríamos exemplos de erro, testaríamos augmentation mais específico, consideraríamos fine tuning e, se possível, adicionaríamos dados externos dessas classes.
 
-### 19. O modelo generaliza para fotos reais de campo?
+### 19. O modelo sabe lidar com uma planta ou doença que não está nas 38 classes?
 
-Ainda não dá para garantir. O PlantVillage é uma base controlada, com folha centralizada, boa iluminação e fundo mais padronizado. Para afirmar generalização externa, seria necessário testar com fotos reais fora da base.
+Não de forma confiável. O modelo sempre escolhe uma das 38 classes conhecidas. Para lidar com classes desconhecidas, seria necessário pensar em limiar de confiança, detecção de out-of-distribution ou treinar com dados desse novo caso.
 
-### 20. Qual é a principal limitação do projeto?
+### 20. Por que versionar o modelo no Git não é sempre uma boa prática?
 
-A principal limitação é a diferença entre o PlantVillage e cenários reais. O resultado é forte dentro da base, mas ainda precisa ser validado com imagens capturadas em condições menos controladas.
+Modelos grandes podem deixar o repositório pesado. Neste projeto, o `.keras` tem cerca de 10 MB, então é aceitável para entrega acadêmica. Em projetos maiores, seria melhor usar Git LFS, storage externo ou registry de modelos.
 
-### 21. O que a matriz de confusão mostra?
+### 21. O que os testes automatizados realmente protegem?
 
-Mostra quais classes o modelo acerta e quais classes ele confunde. Ela ajuda a identificar padrões de erro e classes que precisam de mais análise.
+Eles protegem regras do experimento, como configuração inválida, split inconsistente e comportamento operacional. Eles não provam que o modelo é bom; eles reduzem risco de erro no pipeline.
 
-### 22. Por que alguns erros têm confiança alta?
+### 22. Se fossem refazer o projeto com mais tempo, qual seria a melhoria mais importante?
 
-Porque a saída softmax sempre distribui probabilidade entre as classes conhecidas. Se o modelo interpreta a imagem como muito parecida com uma classe errada, ele pode atribuir alta confiança a essa classe.
-
-### 23. O que vocês fariam para melhorar o modelo?
-
-Próximos passos:
-
-- Validar com fotos reais fora do PlantVillage.
-- Fazer fine tuning controlado de mais camadas.
-- Testar EfficientNet ou outro backbone.
-- Usar augmentation mais próximo de cenários reais.
-- Analisar as classes com maior confusão.
-
-### 24. Como vocês garantiram reprodutibilidade?
-
-Usamos seed fixa, split determinístico, `shuffle_files=False`, configuração centralizada em `ExperimentConfig`, metadados salvos do treino, modelo versionado e artefatos de avaliação no repositório.
-
-### 25. O que existe no GitHub além do HTML da apresentação?
-
-O repositório contém código do pacote, scripts CLI, testes, modelo `.keras`, métricas, gráficos, matriz de confusão, exemplos de acertos e erros, documentação e arquivos de configuração.
-
-### 26. Que testes foram feitos?
-
-Os testes automatizados cobrem regras do experimento, validação de configuração, split de dados, comportamento operacional e pontos críticos para evitar configurar o treino de forma inválida.
-
-### 27. Por que colocar o modelo no Git?
-
-O arquivo `.keras` tem cerca de 10 MB, então é pequeno o suficiente para versionar. Isso facilita a entrega acadêmica, permite reproduzir a avaliação sem retreinar e deixa o repositório completo.
-
-### 28. Por que usar Docker?
-
-Docker ajudou a isolar o ambiente, usar a imagem TensorFlow GPU e limitar recursos como CPU e RAM. Isso tornou o treino mais controlado.
-
-### 29. Por que usar GPU?
-
-Treino de CNN é caro em CPU. A GPU acelera operações matriciais e convolucionais. No experimento, a primeira época caiu de cerca de 944s na CPU para cerca de 111s na GPU.
-
-### 30. Qual é a mensagem final do projeto?
-
-O projeto mostra um fluxo completo e reprodutível de deep learning em uma base conhecida: dados, modelo, treino, avaliação, predição, métricas, testes e artefatos versionados.
+Validar com imagens reais fora do PlantVillage. Depois disso, faria sentido comparar backbones, fazer fine tuning progressivo e analisar melhor as classes com maior confusão.
 
 ## Checklist de treino antes da apresentação
 
@@ -407,4 +367,3 @@ O projeto mostra um fluxo completo e reprodutível de deep learning em uma base 
 - Todos devem saber diferenciar acurácia, F1 macro e F1 ponderado.
 - Todos devem saber dizer que o teste não foi usado no treino.
 - Ensaiar uma versão de 10 minutos e outra de 15 minutos.
-
